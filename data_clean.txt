@@ -1,0 +1,34 @@
+# done on jupyter notebook:
+
+import pandas as pd 
+import altair as alt
+import os
+import numpy as np
+import numpy as np
+import random
+import matplotlib.pyplot as plt 
+import seaborn as sns
+from matplotlib.colors import LogNorm, Normalize
+
+volcano = pd.read_json('data/significant-volcanic-eruption-database.json')
+volcano["month"] = volcano["month"].astype('Int64')
+volcano["day"] = volcano["day"].astype('Int64')
+volcano["Tsunami caused?"]= (volcano["tsu"] == "Tsunami")
+volcano = volcano.drop("tsu", axis=1)
+volcano["Earthquake caused?"]= (volcano["eq"] == "Earthquake")
+volcano = volcano.drop("eq", axis=1)
+volcano["Volcano Explosive Index"]= volcano["vei"].astype('Int64')
+volcano = volcano.drop("vei", axis=1)
+volcano = (volcano.drop(["deaths", "deaths_description", 
+                         "missing", "missing_description", 
+                         "injuries", "injuries_description", 
+                         "damage_millions_dollars", "damage_description", 
+                         "houses_destroyed", "houses_destroyed_description", 
+                         "houses_damaged_description", "total_houses_damaged_description",
+                         "total_missing_description", "total_injuries", "total_houses_destroyed", 
+                        "total_damage_millions_dollars", "total_missing"], axis=1))
+volcano["longitude"] = volcano["coordinates"].apply(lambda x: x["lon"])
+volcano["latitude"] = volcano["coordinates"].apply(lambda x: x["lat"])
+volcano = volcano.drop("coordinates", axis=1)
+
+volcano
