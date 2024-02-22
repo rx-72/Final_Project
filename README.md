@@ -8,3 +8,5 @@ Narrative idea:
   - geo map style? (maybe lab 6 look into)
   - iterate by year (implement auto, speed up, pause, skip to certain year, displaying eruptions overtime overlayed with world map)
   - color or other data reprsentation splitting for country, number of deaths, damage etc. (some sort of categorical data representation, probably look into lecture 3 the more categorical stuff we add)
+  - Combine with a narrative story idea that guides the reader about how these eruptions or common ideas will be tested by both us and the reader through the interactive.
+    - (Utilize lab 7 narrative style and lab 6 style mapbox and conditioning?) 
