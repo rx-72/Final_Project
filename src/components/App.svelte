@@ -26,8 +26,8 @@
                total_injuries: d["total_injuries_description"],
                total_damage: d["total_damage_description"],
                houses_destroyed: d["total_houses_destroyed_description"],
-               Tsunami_caused: d["Tsunami_caused?"], 
-               Earthquake_caused: d["Earthquake_caused?"],
+               Tsunami_caused: d["Tsunami caused?"], 
+               Earthquake_caused: d["Earthquake caused?"],
                Volcano_explosive_index: d["Volcano Explosive Index"],
                longitude: d["longitude"],
                latitude: d["latitude"],
@@ -36,7 +36,6 @@
         volcanos = volcanos;
     });
 
-    $: console.log(volcanos)
 </script>
 
 <main>
