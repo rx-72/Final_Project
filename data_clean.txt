@@ -10,12 +10,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.colors import LogNorm, Normalize
 
+def tsu(x):
+    if (x):
+        return "yes"
+    else:
+        return "no"
 volcano = pd.read_json('data/significant-volcanic-eruption-database.json')
 volcano["month"] = volcano["month"].astype('Int64')
 volcano["day"] = volcano["day"].astype('Int64')
-volcano["Tsunami caused?"]= (volcano["tsu"] == "Tsunami")
+volcano["Tsunami caused?"]= (volcano["tsu"] == "Tsunami").apply(tsu)
 volcano = volcano.drop("tsu", axis=1)
-volcano["Earthquake caused?"]= (volcano["eq"] == "Earthquake")
+volcano["Earthquake caused?"]= (volcano["eq"] == "Earthquake").apply(tsu)
 volcano = volcano.drop("eq", axis=1)
 volcano["Volcano Explosive Index"]= volcano["vei"].astype('Int64')
 volcano = volcano.drop("vei", axis=1)
