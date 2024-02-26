@@ -63,13 +63,15 @@
     $: d3.select(gy)
     .call(d3.axisLeft(y).ticks(width / 100))
 
-    $: years = d3.group(volcanos, d => d.year.getFullYear());
+    $: years = d3.group(volcanos, d => d.year);
 
     $: Tsunami = d3.group(volcanos, d => d.Tsunami_caused);
     $: earthquake = d3.group(volcanos, d => d.Earthquake_caused);
 
-    $: console.log(Tsunami);
-    $: console.log(earthquake);
+    $: deadly = [volcanos[277], volcanos[517], volcanos[584], volcanos[540], volcanos[291], volcanos[193], volcanos[822], volcanos[574], volcanos[302], volcanos[304]]
+
+    $: console.log(deadly)
+    // $: console.log(years)
 
     function explosive(groups) {
         // console.log(groups);

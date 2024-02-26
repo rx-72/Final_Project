@@ -12,7 +12,7 @@
         const csv = await res.text();
         await d3.csvParse(csv, (d) => {
             volcanos.push({
-               year: new Date(Date.UTC(d["year"])),
+               year: (new Date(Date.UTC(d["year"]))).getFullYear() + 1,
                month: d["month"],
                day: d["day"],
                name: d["name"],

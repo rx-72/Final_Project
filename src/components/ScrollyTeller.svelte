@@ -32,16 +32,16 @@
 
 <style>
     section {
-    height: 80vh;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.2); /* 20% opaque */
     /* color: white; */
     outline: black;
     text-align: center;
-    max-width: 750px; /* adjust at will */
+    max-width: 5000px; /* adjust at will */
     color: black;
     padding: 1em;
     margin: 0 0 2em 0;
-    width: 80%;
+    width: 95%;
     margin-right:auto;
     margin-left:auto;
   }
