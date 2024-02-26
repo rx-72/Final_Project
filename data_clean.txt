@@ -37,3 +37,42 @@ volcano["latitude"] = volcano["coordinates"].apply(lambda x: x["lat"])
 volcano = volcano.drop("coordinates", axis=1)
 
 volcano
+
+## getting most destructive
+
+def desc_dmg(x):
+    if x == 'Few (~1 to 50 deaths)':
+        return 2
+    elif x == None:
+        return 1
+    elif x == 'Many (~101 to 1000 deaths)':
+        return 4
+    elif x == 'Some (~51 to 100 deaths)':
+        return 3
+    return 5
+
+def desc_cost(x):
+    if x == None:
+        return 1
+    elif x == 'SEVERE (~>$5 to $24 million)':
+        return 2
+    elif x == 'LIMITED (roughly corresponding to less than $1 million)':
+        return 3
+    elif x == 'MODERATE (~$1 to $5 million)':
+        return 4
+    return 5
+
+def desc_cost(x):
+    if x == None:
+        return 1
+    elif x == 'Few (~1 to 50 houses)':
+        return 2
+    elif x == 'Some (~51 to 100 houses)':
+        return 3
+    elif x == 'Many (~101 to 1000 houses)':
+        return 4
+    return 5
+
+total = volcano['total_deaths_description'].apply(desc_dmg) + volcano['total_injuries_description'].apply(desc_dmg) + volcano['total_damage_description'].apply(desc_cost)
+top = total.sort_values()[-10:]
+volcano.iloc[top.keys()]
