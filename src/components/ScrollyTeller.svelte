@@ -32,8 +32,8 @@
 
 <style>
     section {
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.2); /* 20% opaque */
+    height: 130vh;
+    background-color: lightblue; /* 20% opaque */
     /* color: white; */
     outline: black;
     text-align: center;
@@ -41,7 +41,7 @@
     color: black;
     padding: 1em;
     margin: 0 0 2em 0;
-    width: 95%;
+    width: 100%;
     margin-right:auto;
     margin-left:auto;
   }

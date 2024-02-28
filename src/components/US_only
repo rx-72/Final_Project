@@ -1,0 +1,69 @@
+<script>
+    import * as d3 from 'd3';
+    let svg;
+    let gx;
+    let gy;
+    // grabbing the data
+    export let US_volcanos;
+    // $: console.log(US_volcanos)
+
+    let us = d3.json('https://d3js.org/us-10m.v2.json')
+
+    let width = 928;
+    let height = 1000;
+    const marginTop = 10;
+    const marginRight = 30;
+    const marginBottom = 20;
+    const marginLeft = 100;
+
+    $: x = d3
+    .scaleLinear()
+    .domain(d3.extent(US_volcanos, (d) => d.latitude))
+    .range([marginLeft, width - marginRight]);
+
+    $: y = d3
+    .scaleLinear()
+    .domain(d3.extent(US_volcanos, (d) => d.longitude))
+    .range([height - marginBottom, marginTop])
+
+    // $: d3.select(gx).call(d3.axisBottom(x).ticks(width / 100));
+    // $: d3.select(gy)
+    // .call(d3.axisLeft(y).ticks(width / 100))
+
+    $: US_years = d3.group(US_volcanos, d => d.year);
+
+    $: US_Tsunami = d3.group(US_volcanos, d => d.Tsunami_caused);
+    $: US_earthquake = d3.group(US_volcanos, d => d.Earthquake_caused);
+
+    function explosive(groups) {
+        
+        return (2.5 * groups.Volcano_explosive_index)
+    }
+
+    // debugger;
+
+</script>
+
+<div class="volcanos">
+    <svg
+    bind:this={svg}
+        {width}
+        {height}
+        viewBox="0 0 {width} {height}"
+        style="max-width: 100%; height: auto; overflow: visible; font: 10px sans-serif;"
+    >
+
+    <g stroke="#000" stroke-opacity="0.2">
+        {#each US_volcanos as d, i}
+            <circle
+            key={i}
+            cx={x(d.latitude)}
+            cy={y(d.longitude)}
+            fill="black"
+            r={explosive(d)}
+            />
+        {/each}
+    </g>
+
+    </svg>
+</div>

@@ -4,6 +4,7 @@
     import Graph from './Graph.svelte';
 
     let volcanos = [];
+    let US_volcanos = [];
 
     onMount(async () => {
         const res = await fetch(
@@ -36,8 +37,39 @@
         volcanos = volcanos;
     });
 
+    onMount(async () => {
+        const res = await fetch(
+            '/US_Volcano_data.csv',
+        );
+        const csv = await res.text();
+        await d3.csvParse(csv, (d) => {
+            US_volcanos.push({
+               year: (new Date(Date.UTC(d["year"]))).getFullYear() + 1,
+               month: d["month"],
+               day: d["day"],
+               name: d["name"],
+               location: d["location"],
+               country: d["country"],
+               elevation: d["elevation"],
+               type: d["type"],
+               status: d["status"],
+               total_deaths: d["total_deaths"],
+               total_deaths_description: d["total_deaths_description"],
+               total_injuries: d["total_injuries_description"],
+               total_damage: d["total_damage_description"],
+               houses_destroyed: d["total_houses_destroyed_description"],
+               Tsunami_caused: d["Tsunami caused?"], 
+               Earthquake_caused: d["Earthquake caused?"],
+               Volcano_explosive_index: d["Volcano Explosive Index"],
+               longitude: d["longitude"],
+               latitude: d["latitude"],
+            });
+        });
+        US_volcanos = US_volcanos;
+    });
+
 </script>
 
 <main>
-    <Graph {volcanos} />
+    <Graph {volcanos} {US_volcanos}/>
 </main>
