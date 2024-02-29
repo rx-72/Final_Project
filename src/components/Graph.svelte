@@ -19,42 +19,42 @@
         let mesh;
         let selected;
         let filterState = {
-        year: null, // Initialize with no year filter
-        location: null // Initialize with no location filter
-    };
-    let filteredVolcanos; 
+                year: null, // Initialize with no year filter
+                location: null // Initialize with no location filter
+         };
+        let filteredVolcanos; 
 
-    function filterByYear(year) {
-  if (year === '1800s') {
-    filterState.year = 1800;
-  } else if (year === '1900s') {
-    filterState.year = 1900;
-  } else if (year === '2000s') {
-    filterState.year = 2000;
-  } else if (year === 'pre-1800s') {
-    filterState.year = 'pre-1800s'; 
-  } else {
-    filterState.year = null; // Reset filter in other cases
-  }
-  updateFilteredData(); 
-}
+        function filterByYear(year) {
+                if (year === '1800s') {
+                filterState.year = 1800;
+                } else if (year === '1900s') {
+                filterState.year = 1900;
+                } else if (year === '2000s') {
+                filterState.year = 2000;
+                } else if (year === 'pre-1800s') {
+                filterState.year = 'pre-1800s'; 
+                } else {
+                filterState.year = null; // Reset filter in other cases
+                }
+                updateFilteredData(); 
+        }
 
-    function filterByLocation(location) {
-        filterState.location = location;
-        updateFilteredData();
-    }
+        function filterByLocation(location) {
+                filterState.location = location;
+                updateFilteredData();
+        }
 
-    function updateFilteredData() {
-        filteredVolcanos = US_volcanos.filter(d => {
-                const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
-                const locationMatches = filterState.location ? d.location === filterState.location : true;
-                console.log("Filtering by year:", filterState.year);
-                console.log("Filtering by location:", filterState.location);
-                // console.log("Number of matches:", filteredVolcanos.length);
-                
-                return yearMatches && locationMatches;
-         });
-}
+        function updateFilteredData() {
+                filteredVolcanos = US_volcanos.filter(d => {
+                        const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
+                        const locationMatches = filterState.location ? d.location === filterState.location : true;
+                        console.log("Filtering by year:", filterState.year);
+                        console.log("Filtering by location:", filterState.location);
+                        // console.log("Number of matches:", filteredVolcanos.length);
+                        
+                        return yearMatches && locationMatches;
+                });
+        }
 
         const points = [
 		{ lat: 60.480, long: -152.750},
@@ -73,27 +73,24 @@
 
 		mesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
 		
-		$: console.log({ states, counties, mesh })
 	})
 
                 
         function coord_proj_cx(d) {
-                let coords = [
-		{ lat: d['latitude'], long: d['longitude'] },
-	    ].map(p => projection([p.long, p.lat]))
-                
-                
+                let coords = [  
+                        { lat: d['latitude'], long: d['longitude'] },
+                        ].map(p => projection([p.long, p.lat]))
+                //$: console.log(coords[0][0])
                 return coords[0][0]
         }
 
         function coord_proj_cy(d) {
                 let coords = [
-		{ lat: d['latitude'], long: d['longitude'] },
-	    ].map(p => projection([p.long, p.lat]))
+		        { lat: d['latitude'], long: d['longitude'] },
+	                ].map(p => projection([p.long, p.lat]))
                 //$: console.log(d['longitude'])
-                $: console.log(coords[0][1])
+                //$: console.log(coords[0][1])
 
-                
                 return coords[0][1]
         }
         
@@ -169,8 +166,6 @@
                                         />
                                 {/if}
                         {/each}
-                        {/if}
-
+                {/if}
         </svg>
-
 </div>
