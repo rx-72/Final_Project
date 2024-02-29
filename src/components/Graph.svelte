@@ -125,7 +125,7 @@
         // debugger;
 
 </script>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <div class="filters">
     <p>Current Filters:</p>
     <p>Year: {filterState.year === null ? 'All' : filterState.year}</p>
@@ -133,17 +133,17 @@
 </div>
 
 <div class="buttons">
-    <button on:click={() => filterByYear('1800s')}>1800s</button>
-    <button on:click={() => filterByYear('1900s')}>1900s</button>
-    <button on:click={() => filterByYear('2000s')}>2000s</button>
-    <button on:click={() => filterByYear('pre-1800s')}>pre-1800s</button>
-    <button on:click={() => filterByYear(null)}>Reset Year</button>
+    <button class="btn btn-outline-primary" on:click={() => filterByYear('1800s')}>1800s</button>
+    <button class="btn btn-outline-primary" on:click={() => filterByYear('1900s')}>1900s</button>
+    <button class="btn btn-outline-primary"on:click={() => filterByYear('2000s')}>2000s</button>
+    <button class="btn btn-outline-primary"on:click={() => filterByYear('pre-1800s')}>pre-1800s</button>
+    <button class="btn btn-outline-primary" on:click={() => filterByYear(null)}>Reset Year</button>
 </div>
 <div class="buttons">
         {#each Array.from(new Set(US_volcanos.map(d => d.location))) as location}
-                <button on:click={() => filterByLocation(location)}>{location}</button>
+                <button class="btn btn-outline-primary" on:click={() => filterByLocation(location)}>{location}</button>
         {/each}
-        <button on:click={() => filterByLocation(null)}>Reset Location</button>
+        <button class="btn btn-primary" on:click={() => filterByLocation(null)}>Reset Location</button>
 </div>
 <div class="volcanos">
         <svg viewBox="-35 10 975 610">
