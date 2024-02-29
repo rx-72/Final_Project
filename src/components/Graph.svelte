@@ -22,21 +22,21 @@
         year: null, // Initialize with no year filter
         location: null // Initialize with no location filter
     };
-    let filteredVolcanos; // Dynamically updated
+    let filteredVolcanos; 
 
     function filterByYear(year) {
-    if (year === '1800s') {
-        filterState.year = 1800;
-    } else if (year === '1900s') {
-        filterState.year = 1900;
-    } else if (year === '2000s') {
-        filterState.year = 2000;
-    } else if (year === 'pre-1800s') {
-        filterState.year = 'before 1800s'; 
-    } else {
-        filterState.year = null; // Reset filter in other cases
-    }
-    updateFilteredData(); 
+  if (year === '1800s') {
+    filterState.year = 1800;
+  } else if (year === '1900s') {
+    filterState.year = 1900;
+  } else if (year === '2000s') {
+    filterState.year = 2000;
+  } else if (year === 'pre-1800s') {
+    filterState.year = 'pre-1800s'; 
+  } else {
+    filterState.year = null; // Reset filter in other cases
+  }
+  updateFilteredData(); 
 }
 
     function filterByLocation(location) {
@@ -46,12 +46,12 @@
 
     function updateFilteredData() {
   filteredVolcanos = US_volcanos.filter(d => {
-    console.log("Location:", filterState.location);
-    console.log("Year:", filterState.year);
-    console.log("Number of matches:", filteredVolcanos.length);
-    
-    const yearMatches = filterState.year === null ? d.year < 1800 : d.year >= filterState.year && d.year <= filterState.year + 99;
+    const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
     const locationMatches = filterState.location ? d.location === filterState.location : true;
+console.log("Filtering by year:", filterState.year);
+console.log("Filtering by location:", filterState.location);
+console.log("Number of matches:", filteredVolcanos.length);
+    
     return yearMatches && locationMatches;
   });
 }
