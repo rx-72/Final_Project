@@ -20,18 +20,18 @@
   </div> -->
 
   <div class="foreground" slot="foreground">
-    <section>This is the first section.
+    <section class="WriteUp">This is the first section.
     </section>
-    <section>This is the second section.
+    <section class="Graph">This is the second section.
         <App />
     </section>
-    <section>This is the third section.</section>
+    <section class="WriteUp">This is the third section.</section>
   </div>
 </Scroller>
 
 
 <style>
-    section {
+    .Graph {
     height: 130vh;
     background-color: lightblue; /* 20% opaque */
     /* color: white; */
@@ -44,5 +44,17 @@
     width: 100%;
     margin-right:auto;
     margin-left:auto;
+  }
+
+  .WriteUp {
+    height: 80vh;
+    background-color: rgba(0, 0, 0, 0.2); /* 20% opaque */
+    /* color: white; */
+    outline: black;
+    text-align: center;
+    max-width: 5000px; /* adjust at will */
+    color: black;
+    padding: 1em;
+    margin: 0 0 2em 0;
   }
 </style>
