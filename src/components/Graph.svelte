@@ -45,15 +45,15 @@
     }
 
     function updateFilteredData() {
-  filteredVolcanos = US_volcanos.filter(d => {
-    const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
-    const locationMatches = filterState.location ? d.location === filterState.location : true;
-console.log("Filtering by year:", filterState.year);
-console.log("Filtering by location:", filterState.location);
-console.log("Number of matches:", filteredVolcanos.length);
-    
-    return yearMatches && locationMatches;
-  });
+        filteredVolcanos = US_volcanos.filter(d => {
+                const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
+                const locationMatches = filterState.location ? d.location === filterState.location : true;
+                console.log("Filtering by year:", filterState.year);
+                console.log("Filtering by location:", filterState.location);
+                // console.log("Number of matches:", filteredVolcanos.length);
+                
+                return yearMatches && locationMatches;
+         });
 }
 
         const points = [
@@ -150,25 +150,26 @@ console.log("Number of matches:", filteredVolcanos.length);
 </div>
 <div class="volcanos">
         <svg viewBox="-35 10 975 610">
+                {#if states && counties && mesh}
+                        <g fill="white" stroke="black">
+                                {#each states as feature, i}
+                                        <path d={path(feature)} on:click={() => selected = feature} class="state" in:draw={{ delay: i * 50, duration: 1000 }} />
+                                {/each}
+                        </g>
 
-                <g fill="white" stroke="black">
-                        {#each states as feature, i}
-                                <path d={path(feature)} on:click={() => selected = feature} class="state" in:draw={{ delay: i * 50, duration: 1000 }} />
+                        {#each US_volcanos as d, i}
+                                {#if filteredVolcanos.includes(d)}
+                                        <circle 
+                                                cx={coord_proj_cx(d)}
+                                                cy={coord_proj_cy(d)}
+                                                r={10 ** (d.Volcano_explosive_index - 4.7)} 
+                                                fill={d.Volcano_explosive_index > 5 ? "red" : "orange"}
+                                                opacity = 0.6
+                                                stroke="gray" 
+                                        />
+                                {/if}
                         {/each}
-                </g>
-
-                {#each US_volcanos as d, i}
-                        {#if filteredVolcanos.includes(d)}
-                                <circle 
-                                        cx={coord_proj_cx(d)}
-                                        cy={coord_proj_cy(d)}
-                                        r={10 ** (d.Volcano_explosive_index - 4.7)} 
-                                        fill={d.Volcano_explosive_index > 5 ? "red" : "orange"}
-                                        opacity = 0.6
-                                        stroke="gray" 
-                                />
                         {/if}
-                {/each}
 
         </svg>
 
