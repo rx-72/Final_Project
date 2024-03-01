@@ -8,7 +8,7 @@
 
     onMount(async () => {
         const res = await fetch(
-            '/Volcano_data.csv',
+            'Volcano_data.csv',
         );
         const csv = await res.text();
         await d3.csvParse(csv, (d) => {
@@ -39,7 +39,7 @@
 
     onMount(async () => {
         const res = await fetch(
-            '/US_Volcano_data.csv',
+            'US_Volcano_data.csv',
         );
         const csv = await res.text();
         await d3.csvParse(csv, (d) => {
