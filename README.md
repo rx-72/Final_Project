@@ -1,3 +1,12 @@
+# Writeup
+### What we've done
+So far, we have created the main visualization which is a geomap of all the documented volcanic eruptions in the U.S. according to [this dataset](https://public.opendatasoft.com/explore/dataset/significant-volcanic-eruption-database/table/). We first did some EDA on the dataset and realized that the `total_deaths` column was not very reliable due to the difficult nature of collecting data on that, so we opted to bin it into discrete ordinal categories. 
+We have added some interactive features such as allowing to filter for volcanic regions and time period through buttons. We marked each volcanic eruption as a circle, and we encoded the eruption's [explosive index](https://www.nps.gov/subjects/volcanoes/volcanic-explosivity-index.htm#) into the radius of the circle.  
+
+### Main challenges
+As part of our narrative design, we plan to then allow the user to "zoom out" from the 2D U.S. map into a 3D globe, which we imagine would be difficult to make a smooth transition for. We are using a Scrollytelling form for our site, so we would have to somehow "increment" the zooming out animation based on the scrolling progress. After that, we also have to figure out what marks to use for eruptions on a 3D map, and making it behave intuitively and look aesthetic will be a large portion of the difficulty.
+
+
 # proposal
 
 Narrative idea:
