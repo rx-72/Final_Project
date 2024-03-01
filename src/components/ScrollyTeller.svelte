@@ -22,7 +22,7 @@
   <div class="foreground" slot="foreground">
     <section class="WriteUp">This is the first section.
     </section>
-    <section class="Graph">This is the second section.
+    <section class="Graph"> Volcano records in the US over the past 200+ years. Choose one or multiple filters and explore!
       <p>Refresh the page if the graph isn't loading.</p>
         <App />
     </section>
@@ -33,7 +33,7 @@
 
 <style>
     .Graph {
-    height: 130vh;
+    height: 170vh;
     background-color: lightblue; /* 20% opaque */
     /* color: white; */
     outline: black;
