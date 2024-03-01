@@ -13,17 +13,25 @@
 
         const projection = geoAlbersUsa().scale(1300).translate([487.5, 305])
         const path = geoPath().projection(null);
+        const yearCategories = ['pre-1800s', '1800s', '1900s', '2000s'];
 
         let states = [];
         let counties = [];
         let mesh;
         let selected;
+        
+        let selectedYear;
+        let prevSelectedYear = null;
+        
+        let selectedLocation = null;
+        let prevSelectedLocation = null;
+        
         let filterState = {
                 year: null, // Initialize with no year filter
                 location: null // Initialize with no location filter
          };
         let filteredVolcanos; 
-
+        
         function filterByYear(year) {
                 if (year === '1800s') {
                 filterState.year = 1800;
@@ -39,17 +47,64 @@
                 updateFilteredData(); 
         }
 
+        function filterByYearAndUpdateClass(category, button) {
+                // If same button pressed twice, deactivate it and change category to null
+                if (selectedYear === category) {
+                        selectedYear = null;
+                        category = null;
+                } else {
+                // If not, change the selected year to the pressed button
+                        selectedYear = category;
+                }
+
+                // Deactivates the previously pressed button
+                if (prevSelectedYear && prevSelectedYear !== button) {
+                        prevSelectedYear.setAttribute('class', 'btn btn-outline-primary');
+                }
+                
+                // Set the prevSelectedYear to the current button
+                if (button) {
+                        button.setAttribute('class', 'btn btn-primary');
+                        prevSelectedYear = button;
+                };
+
+                filterByYear(category);
+        }
+
         function filterByLocation(location) {
                 filterState.location = location;
                 updateFilteredData();
+        }
+
+        function filterByLocationAndUpdateClass(location, button) {
+                // If same button pressed twice, deactivate it
+                if (selectedLocation === location) {
+                        selectedLocation = null;
+                        location = null;
+                } else {
+                // Else change selected location to the button's
+                        selectedLocation = location;
+                }
+
+                 // Deactivates the previously pressed button
+                 if (prevSelectedLocation && prevSelectedLocation !== button) {
+                        prevSelectedLocation.setAttribute('class', 'btn btn-outline-primary');
+                }
+
+                if (button) {
+                        button.setAttribute('class', 'btn btn-primary');
+                        prevSelectedLocation = button;
+                }
+
+                filterByLocation(location);
         }
 
         function updateFilteredData() {
                 filteredVolcanos = US_volcanos.filter(d => {
                         const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
                         const locationMatches = filterState.location ? d.location === filterState.location : true;
-                        console.log("Filtering by year:", filterState.year);
-                        console.log("Filtering by location:", filterState.location);
+                        // console.log("Filtering by year:", filterState.year);
+                        // console.log("Filtering by location:", filterState.location);
                         // console.log("Number of matches:", filteredVolcanos.length);
                         
                         return yearMatches && locationMatches;
@@ -94,6 +149,7 @@
                 return coords[0][1]
         }
         
+        
 
         const marginTop = 50;
         const marginRight = 50;
@@ -133,17 +189,28 @@
 </div>
 
 <div class="buttons">
-    <button class="btn btn-outline-primary" on:click={() => filterByYear('1800s')}>1800s</button>
-    <button class="btn btn-outline-primary" on:click={() => filterByYear('1900s')}>1900s</button>
-    <button class="btn btn-outline-primary"on:click={() => filterByYear('2000s')}>2000s</button>
-    <button class="btn btn-outline-primary"on:click={() => filterByYear('pre-1800s')}>pre-1800s</button>
-    <button class="btn btn-outline-primary" on:click={() => filterByYear(null)}>Reset Year</button>
+        {#each yearCategories as category}
+                <button
+                        class="btn"
+                        class:btn-outline-primary={selectedYear !== category}
+                        class:btn-primary={selectedYear === category}
+                        on:click={() => filterByYearAndUpdateClass(category)}
+                >
+                        {category}
+                </button>
+        {/each}
 </div>
+
 <div class="buttons">
         {#each Array.from(new Set(US_volcanos.map(d => d.location))) as location}
-                <button class="btn btn-outline-primary" on:click={() => filterByLocation(location)}>{location}</button>
+                <button 
+                        class="btn"
+                        class:btn-outline-primary={selectedLocation !== location}
+                        class:btn-primary={selectedLocation === location}
+                        on:click={() => filterByLocationAndUpdateClass(location)}>
+                        {location}
+                </button>
         {/each}
-        <button class="btn btn-primary" on:click={() => filterByLocation(null)}>Reset Location</button>
 </div>
 <div class="volcanos">
         <svg viewBox="-35 10 975 610">
