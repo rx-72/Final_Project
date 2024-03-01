@@ -180,6 +180,27 @@
         console.log(points)
         // debugger;
 
+        // Tooltip
+        let tooltip;
+        let tooltipText = null;
+        function showTooltip(d) {
+                console.log(d);
+                // Change text to the current hovered volcano d
+                tooltipText = `Volcano Name: ${d.Volcano_name}\nYear: ${d.year}\nLocation: ${d.location}`;
+                tooltip.textContent = tooltipText;
+                
+                // Move tooltip to hovered volcano d
+                tooltip.style.left = d.cx;
+                tooltip.style.top = d.cy;
+
+                // Show tooltip
+                tooltip.style.visibility = 'visible';
+        }
+
+        function hideTooltip() {
+                // Hide tooltip
+                tooltip.style.visibility = 'hidden';
+        }
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <div class="filters">
@@ -212,27 +233,50 @@
                 </button>
         {/each}
 </div>
-<div class="volcanos">
+
+<div class="volcanos">  
         <svg viewBox="-35 10 975 610">
+                <!--    If all the necessary data is loaded in  -->
                 {#if states && counties && mesh}
                         <g fill="white" stroke="black">
                                 {#each states as feature, i}
-                                        <path d={path(feature)} on:click={() => selected = feature} class="state" in:draw={{ delay: i * 50, duration: 1000 }} />
+                                        <path d={path(feature)} 
+                                         on:mouseover={() => selected = feature} 
+                                         class="state" 
+                                         in:draw={{ delay: i * 50, duration: 500 }} 
+                                         on:animationend={() => updateFilteredData()}
+                                         />
                                 {/each}
                         </g>
+                        {console.log(US_volcanos.length)}
+                        {console.log("Begin drawing dots")}
 
                         {#each US_volcanos as d, i}
                                 {#if filteredVolcanos.includes(d)}
-                                        <circle 
-                                                cx={coord_proj_cx(d)}
-                                                cy={coord_proj_cy(d)}
-                                                r={10 ** (d.Volcano_explosive_index - 4.7)} 
-                                                fill={d.Volcano_explosive_index > 5 ? "red" : "orange"}
-                                                opacity = 0.6
-                                                stroke="gray" 
+                                        <!-- svelte-ignore a11y-interactive-supports-focus -->
+                                        <circle
+                                         cx={coord_proj_cx(d)}
+                                         cy={coord_proj_cy(d)}
+                                         r={10 ** (d.Volcano_explosive_index - 4.7)}
+                                         fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
+                                         opacity={0.6}
+                                         stroke="gray"
+                                         role="button"
+                                         aria-label={`Volcano ${d.Volcano_name}, Year: ${d.year}, Location: ${d.location}`}
                                         />
                                 {/if}
                         {/each}
                 {/if}
         </svg>
 </div>
+
+<style>
+        .tooltip {
+            background-color: white;
+            padding: 8px;
+            border: 1px solid black;
+            border-radius: 4px;
+            position: fixed;
+            z-index: 1;
+        }
+</style>

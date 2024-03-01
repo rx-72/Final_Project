@@ -23,6 +23,7 @@
     <section class="WriteUp">This is the first section.
     </section>
     <section class="Graph">This is the second section.
+      <p>Refresh the page if the graph isn't loading.</p>
         <App />
     </section>
     <section class="WriteUp">This is the third section.</section>
