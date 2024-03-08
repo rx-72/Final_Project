@@ -4,6 +4,12 @@
 	import * as topojson from 'topojson-client';
 	import { geoPath, geoAlbersUsa } from 'd3-geo';
 	import { draw } from 'svelte/transition';
+        import { tweened } from 'svelte/motion';
+        import { cubicInOut } from 'svelte/easing';
+
+        let triggerAnimation = 1;
+        let radiusScale = tweened(1, { duration: 1210, easing: cubicInOut });
+        let showCircle = true;
         let svg;
         let gx;
         let gy;
@@ -100,37 +106,60 @@
         }
 
         function updateFilteredData() {
-                filteredVolcanos = US_volcanos.filter(d => {
-                        const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
-                        const locationMatches = filterState.location ? d.location === filterState.location : true;
-                        // console.log("Filtering by year:", filterState.year);
-                        // console.log("Filtering by location:", filterState.location);
-                        // console.log("Number of matches:", filteredVolcanos.length);
-                        
-                        return yearMatches && locationMatches;
-                });
+        filteredVolcanos = US_volcanos.filter(d => {
+            const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true;
+            const locationMatches = filterState.location ? d.location === filterState.location : true;
+
+            return yearMatches && locationMatches;
+        });
+        function instantDisappear() {
+        const circle = document.getElementById('circle');
+        if (circle) {
+            circle.style.transition = 'none'; // THIS DOESN"T ACTUALLY WORK, BUT I WANT IT TO INSTANTLY DISAPPEAR WHEN YOU FILTER AND THEN REAPPEAR W THE ANIMATINO
+            circle.style.opacity = '0';
         }
+    }
+        // Reset the trigger and set the animation by updating the radius scale
+        triggerAnimation += 1;
 
-        const points = [
-		{ lat: 60.480, long: -152.750},
-	].map(p => projection([p.long, p.lat]))
+        // Attempting to use broken function doesn't break
+        instantDisappear();
 
-        onMount(async () => {
-		const us = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
-			.then(d => d.json())
-                updateFilteredData();
-		console.log({ us })
-		
-		states = topojson.feature(us, us.objects.states).features;
-		// console.log({ features })
-		
-		counties = topojson.feature(us, us.objects.counties).features;
+        // Reset so it doesnt infinitely increase
+        radiusScale.set(0); 
 
-		mesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
-		
-	})
+        // Timeout so animations don't overlap and break
+        setTimeout(() => {
+            radiusScale.set(1);
 
-                
+            // This doesn't work 
+            const circle = document.getElementById('circle');
+            if (circle) {
+                circle.style.transition = '';
+                circle.style.opacity = '1';
+            }
+        }, 1210); // SHOULD MATCH THE DURATION OF THE TWEENED ANIMATION
+    }
+                const points = [
+                        { lat: 60.480, long: -152.750},
+                ].map(p => projection([p.long, p.lat]))
+
+                onMount(async () => {
+                        const us = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
+                                .then(d => d.json())
+                        updateFilteredData();
+                        console.log({ us })
+                        
+                        states = topojson.feature(us, us.objects.states).features;
+                        // console.log({ features })
+                        
+                        counties = topojson.feature(us, us.objects.counties).features;
+
+                        mesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
+                        
+                })
+
+             
         function coord_proj_cx(d) {
                 let coords = [  
                         { lat: d['latitude'], long: d['longitude'] },
@@ -169,7 +198,6 @@
 
         $: US_Tsunami = d3.group(US_volcanos, d => d.Tsunami_caused);
         $: US_earthquake = d3.group(US_volcanos, d => d.Earthquake_caused);
-
         // $: console.log(deadly)
 
         function explosive(groups) {
@@ -197,7 +225,7 @@
                 d3.select("#US_tooltip")
                   .style('visibility', 'hidden')
         }
-       
+        
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
@@ -248,21 +276,17 @@
                                         <!-- svelte-ignore a11y-interactive-supports-focus -->
                                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                                         <circle
-                                         cx={coord_proj_cx(d)}
-                                         cy={coord_proj_cy(d)}
-                                         r={4*(d.Volcano_explosive_index)}
-                                         fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
-                                         opacity={0.6}
-                                         stroke="gray"
-                                         role="button"
-                                         aria-label={`Volcano ${d.name}, Year: ${d.year}, Location: ${d.location}`}
-                                         on:mouseover={
-                                                showTooltip_US(d)
-                                         }
-                                         on:mouseleave={
-                                                hideTooltip_US(d)
-                                         }
-                                        />
+                                        cx={coord_proj_cx(d)}
+                                        cy={coord_proj_cy(d)}
+                                        r={$radiusScale * 4 * (d.Volcano_explosive_index)}
+                                        fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
+                                        opacity={0.6}
+                                        stroke="gray"
+                                        role="button"
+                                        aria-label={`Volcano ${d.name}, Year: ${d.year}, Location: ${d.location}`}
+                                        on:mouseover={showTooltip_US(d)}
+                                        on:mouseleave={hideTooltip_US(d)}
+                                />
                                 {/if}
                         {/each}
                 {/if}

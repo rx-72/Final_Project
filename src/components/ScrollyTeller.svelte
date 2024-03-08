@@ -1,9 +1,16 @@
 <script>
     import Scroller from "@sveltejs/svelte-scroller";
     import App from '../components/App.svelte';
+    import App2 from '../components/App2.svelte';
   
     let count, index, offset, progress;
 
+    let sections = [
+        { name: 'First Section', component: null },
+        { name: 'Graph Section', component: App },
+        { name: 'WorldGraph Section', component: App2 },
+        { name: 'Fourth Section', component: null }
+    ];
 </script>
 
 <Scroller
@@ -15,24 +22,62 @@
   bind:offset
   bind:progress
 >
-  <!-- <div class="background" slot="background">
-
-  </div> -->
+  <div class="index" slot="index">
+    {#each sections as section, i}
+      <div class="index-item" class:selected={i === index}>
+        {section.name}
+      </div>
+    {/each}
+  </div>
 
   <div class="foreground" slot="foreground">
-    <section class="WriteUp">This is the first section.
-    </section>
-    <section class="Graph"> Volcano records in the US over the past 200+ years. Choose one or multiple filters and explore!
-      <p>Refresh the page if the graph isn't loading.</p>
-        <App />
-    </section>
-    <section class="WriteUp">This is the third section.</section>
+    {#each sections as section, i}
+      {#if i === 1 && section.component}
+        <section class="Graph">
+          <p>Volcano records in the US over the past 200+ years. Choose one or multiple filters and explore!</p>
+          <p>Refresh the page if the graph isn't loading.</p>
+          <svelte:component this={section.component} />
+        </section>
+      {:else if i === 2 && section.component}
+        <section class="WorldGraph">
+          <p>Whole World Volcanos.</p>
+          <svelte:component this={section.component} />
+        </section>
+      {:else}
+        <section class="WriteUp">
+          {section.name}
+        </section>
+      {/if}
+    {/each}
   </div>
 </Scroller>
 
 
 <style>
-    .Graph {
+  .index {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    padding: 1em;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .index-item {
+    margin: 0 1em;
+    cursor: pointer;
+    font-weight: bold;
+    color: gray;
+  }
+
+  .index-item.selected {
+    color: black;
+  }
+
+  .Graph {
     height: 170vh;
     background-color: lightblue; /* 20% opaque */
     /* color: white; */

@@ -71,5 +71,5 @@
 </script>
 
 <main>
-    <Graph {volcanos} {US_volcanos}/>
+    <WorldGraph {volcanos} {US_volcanos}/>
 </main>
