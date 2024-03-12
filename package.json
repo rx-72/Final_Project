@@ -19,8 +19,6 @@
 	"dependencies": {
 		"@sveltejs/svelte-scroller": "^2.0.7",
 		"d3": "^7.8.5",
-		"three": "^0.162.0",
-		"three-globe": "^2.31.0",
 		"topojson": "^3.0.2",
 		"topojson-client": "^3.1.0"
 	}
