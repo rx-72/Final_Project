@@ -2,9 +2,11 @@
     import * as d3 from 'd3';
     import { onMount } from 'svelte';
     import Graph from './Graph.svelte';
-    import WorldGraph from './WorldGraph.svelte';
+    import Globe from './Globe.svelte';
+
     let volcanos = [];
     let US_volcanos = [];
+    let selected = Graph
 
     onMount(async () => {
         const res = await fetch(
@@ -32,6 +34,7 @@
                Volcano_explosive_index: d["Volcano Explosive Index"],
                longitude: d["longitude"],
                latitude: d["latitude"],
+	       damage_caused_rank: d["total"],	
             });
         });
         volcanos = volcanos;
@@ -63,6 +66,7 @@
                Volcano_explosive_index: d["Volcano Explosive Index"],
                longitude: d["longitude"],
                latitude: d["latitude"],
+	       damage_caused_rank: d["total"], 
             });
         });
         US_volcanos = US_volcanos;
@@ -70,6 +74,40 @@
 
 </script>
 
-<main>
+<!-- <main>
     <Graph {volcanos} {US_volcanos}/>
-</main>
+</main> -->
+
+<svelte:component this={selected} {volcanos} {US_volcanos}/>
+
+<button class="test" on:click={()=> selected = Graph}>
+	US map
+</button>
+<button class="test" on:click={()=> selected = Globe}>
+	World Globe
+</button>
+
+<style>
+    .test{
+        background-color: #04AA6D;
+        border: black;
+        text-align: center;
+        font-size:25px;
+        display: inline-block;
+        transition-duration: 0.4s;
+        margin:5px;
+        padding:15px;
+	    animation: fade 2s;
+    }
+
+    .test:hover{
+        background-color: white;
+        border :#04AA6D
+    }
+
+    @keyframes fade {
+        0%,100% { opacity: 0 }
+        50% { opacity: 1 }
+    }
+
+</style>
